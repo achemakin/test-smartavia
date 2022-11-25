@@ -3,22 +3,19 @@ import useStore from '../../store';
 import Button from 'react-bootstrap/Button';
 
 const ButtonAdd: FC = () => {
-  const { bitcoins, fetchBitcoin } = useStore.getState();
+  const { fetchBitcoin, counterButtonAdd } = useStore(({ fetchBitcoin, counterButtonAdd }) => ({ fetchBitcoin, counterButtonAdd }));
   
-  let [disabledClickButton, setDisablaedClickButton] = React.useState(false);
   const hendler = (e: React.MouseEvent<HTMLElement>) => {
     fetchBitcoin();
   };
 
-  
-
   return (
     <Button 
       variant="outline-secondary"
-      disabled={disabledClickButton}
+      disabled={counterButtonAdd > 2}
       onClick={hendler}
     >
-        Получить адрес Bitcoin
+        Сгенерировать {counterButtonAdd}
     </Button>
   );
 };
