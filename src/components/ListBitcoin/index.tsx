@@ -1,23 +1,62 @@
 import React, { FC } from 'react';
 import useStore from '../../store';
-import ListGroup from 'react-bootstrap/ListGroup';
-
+import { useClipboard } from 'use-clipboard-copy';
+import {
+  List,
+  Item,
+  Card,
+  CardInfo,
+  CardСaption,
+  CardAddress,
+  ButtonCopy,
+  CardError,
+  TextError,
+  ImgError,
+  CardLoad,
+  LoadProgress,
+  LoadIcon
+} from './style';
+import { CopyIcon } from './icon';
+ 
 const ListBitcoin: FC = () => {
   const { bitcoins } = useStore(({ bitcoins }) => ({ bitcoins }));
-  console.log(bitcoins);
- 
+  const clipboard = useClipboard();
+
   return (
-    <ListGroup>
+    <List>
       {bitcoins && bitcoins.map((item) => (
-        <ListGroup.Item action variant="light" key={item.id}>
+        <Item key={item.id}>
           
-          {item.isLoading && <p>Загрузка...</p>}
-          {item.error && <p>Что-то пошло не так...</p>}
+          {item.isLoading && (
+            <CardLoad>
+              <LoadIcon />
+              <LoadProgress />
+              <TextError>Генерим...</TextError>                       
+            </CardLoad>
+          )}
           
-          {item.pkey && <p>Ваш Bitcoin адрес: {item.addr}</p>}
-        </ListGroup.Item>
+          {item.error && (
+            <CardError>
+              <ImgError src="./img/bitcoin-broken.png" />
+              <TextError>Что-то пошло не так...</TextError>
+            </CardError>
+          )}
+          
+          {item.pkey && (
+            <Card>
+              <CardInfo>
+                <CardСaption>Bitcoin адрес</CardСaption>
+                <CardAddress>{item.addr}</CardAddress>                
+              </CardInfo>
+
+              <ButtonCopy onClick={() => clipboard.copy(item.addr)}>
+                <CopyIcon />
+              </ButtonCopy>                          
+            </Card>
+          )}
+        </Item>
       ))}
-    </ListGroup>
+    </List>
   );
 };
 

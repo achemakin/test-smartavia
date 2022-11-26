@@ -1,17 +1,35 @@
 import React, { FC } from 'react';
-import Container from 'react-bootstrap/Container';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import ButtonAdd from '../../components/ButtonAdd';
+import useStore from '../../store';
+import { Container } from '../../lib/styled/container';
+import { HeaderEl, Title, Wrap, ButtonClear, WrapSmall } from './style';
+import { BitcoinLogo, ClearIcon } from './icon';
 
 const Header: FC = () => {
+   const { bitcoins, clearBitcoins } = useStore(({ bitcoins, clearBitcoins }) => ({ bitcoins, clearBitcoins }));
   return (
-    <header className="w-100 pt-4 pb-4 mb-3 border-bottom ">
-      <Container className="d-md-flex justify-content-between align-items-center">
-        <h1>Генерация красивых адресов Bitcoin</h1>
+    <HeaderEl>
+      <Container>
+        {!!bitcoins.length && (
+          <WrapSmall>
+            <BitcoinLogo />
+            <ButtonClear onClick={clearBitcoins}>
+              <ClearIcon />
+            </ButtonClear>
+          </WrapSmall>
+        )}
 
-        <ButtonAdd />
+        {!bitcoins.length && (
+          <Title>
+            Генерация красивых
+            
+            <Wrap>
+              адресов
+              <BitcoinLogo />
+            </Wrap>          
+          </Title>
+        )}                
       </Container>
-    </header>
+    </HeaderEl>
   );
 };
 

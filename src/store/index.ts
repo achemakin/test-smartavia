@@ -14,6 +14,7 @@ interface IBitcoins {
   bitcoins: IBitcoin[];
   counterButtonAdd: number;
   fetchBitcoin: () => void;
+  clearBitcoins: () => void;
 }
 
 const useStore = create<IBitcoins>() (
@@ -22,6 +23,9 @@ const useStore = create<IBitcoins>() (
       (set, get) => ({
         bitcoins: [],
         counterButtonAdd: 0,
+        clearBitcoins() {
+          set({ bitcoins: []});
+        },
         async fetchBitcoin() {
           let bitcoins = get().bitcoins;
           let counterButtonAdd = get().counterButtonAdd;
@@ -37,7 +41,7 @@ const useStore = create<IBitcoins>() (
           set({ bitcoins, counterButtonAdd });
 
           try {
-            const response = await fetch('http://achemakin.ru/test-smartavia/btcaddr.php');
+            const response = await fetch('./btcaddr.php');
             if (!response.ok) throw response;
             const result = await response.json();
             if (!result || !result.addr || !result.pkey) throw Error('Ошибка JSON');

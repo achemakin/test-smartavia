@@ -1,21 +1,24 @@
 import React, { FC } from 'react';
 import useStore from '../../store';
-import Button from 'react-bootstrap/Button';
+import { Button } from './style';
 
 const ButtonAdd: FC = () => {
   const { fetchBitcoin, counterButtonAdd } = useStore(({ fetchBitcoin, counterButtonAdd }) => ({ fetchBitcoin, counterButtonAdd }));
   
   const hendler = (e: React.MouseEvent<HTMLElement>) => {
     fetchBitcoin();
+    window.scroll({
+      top: 0,
+      behavior: 'auto'
+    });
   };
 
   return (
-    <Button 
-      variant="outline-secondary"
+    <Button     
       disabled={counterButtonAdd > 2}
       onClick={hendler}
     >
-        Сгенерировать {counterButtonAdd}
+        Сгенерировать
     </Button>
   );
 };
